@@ -1,3 +1,5 @@
+"""The gzip command in Linux can only be used to compress a single file.
+ In order to compress a folder, tar + gzip (which is basically tar -z) is used​."""
 import base64
 import gzip
 import json
@@ -29,8 +31,4 @@ class Gz(Worker):
                         "id": data['id'], #I think this is the only field needed, we can grab the unique node based on id alone
                         "type": data['type']}
                     }
-
-        channel = self.get_channel(self.config['rabbitmq'])
-        channel.basic_publish(exchange='machina',
-            routing_key='Identifier',
-            body=json.dumps(body))
+        self.publish_next(json.dumps(body))
